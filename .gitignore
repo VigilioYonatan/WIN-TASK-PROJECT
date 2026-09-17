@@ -1,0 +1,131 @@
+# ============================
+# .NET
+# ============================
+# Build results
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# .NET Core / 5+
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider / IntelliJ
+.idea/
+*.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+nuget.exe
+!.nuget/
+
+# Test / cobertura
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+*.opencover.xml
+TestResults/
+
+# Archivos de entorno y secretos .NET
+appsettings.*.json
+!appsettings.json
+!appsettings.Example.json
+*.pfx
+*.key
+
+# Entity Framework
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+Migrations/*/ModelSnapshot.cs.bak
+
+# ============================
+# Angular / Node
+# ============================
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Build de Angular
+dist/
+.angular/
+out-tsc/
+tmp/
+temp/
+
+# Cache de herramientas
+.eslintcache
+.npm/
+.yarn/
+*.tsbuildinfo
+
+# Testing (Karma / Jest / Cypress)
+coverage/
+lib-cov/
+*.lcov
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+
+# Entornos y secretos de Angular
+# ⚠️ Opción 1: ignorar TODOS los environment (recomendado, usar ejemplos)
+src/environments/environment*.ts
+!src/environments/environment.example.ts
+!src/environments/environment.prod.example.ts
+
+# ⚠️ Opción 2: si tu equipo sí commitea los environment (menos seguro)
+# ignora solo el local:
+# src/environments/environment.local.ts
+
+# ============================
+# Sistema operativo / editor
+# ============================
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.swp
+*.swo
+*~
+
+# ============================
+# Otros
+# ============================
+*.log
+.env
+.env.*
+!.env.example
+*.tmp
+*.cache
+publish/
+PublishProfiles/*.pubxml.user

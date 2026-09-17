@@ -1,0 +1,26 @@
+<header class="navbar">
+  <div class="navbar-container">
+    <div class="brand">
+      <a routerLink="/" class="brand-link">
+        <span class="brand-title">TaskManager Enterprise</span>
+      </a>
+    </div>
+
+    <nav class="nav-links" *ngIf="authService.isAuthenticated()">
+      <a routerLink="/tasks" routerLinkActive="active" class="nav-item">Mis Tareas</a>
+      <a routerLink="/categories" routerLinkActive="active" class="nav-item">Categorías</a>
+    </nav>
+
+    <div class="user-menu" *ngIf="authService.isAuthenticated(); else guestBlock">
+      <span class="user-name">{{ authService.currentUser()?.nombre }}</span>
+      <button (click)="onLogout()" class="btn btn-secondary btn-sm">Cerrar Sesión</button>
+    </div>
+
+    <ng-template #guestBlock>
+      <div class="auth-buttons">
+        <a routerLink="/auth/login" class="btn btn-secondary btn-sm">Iniciar Sesión</a>
+        <a routerLink="/auth/register" class="btn btn-primary btn-sm">Registrarse</a>
+      </div>
+    </ng-template>
+  </div>
+</header>

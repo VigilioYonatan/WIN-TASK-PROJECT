@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="header-action">
+    <div>
+      <h1 class="page-title">Gestión de Categorías</h1>
+      <p class="page-subtitle">Organiza tus tareas mediante categorías temáticas</p>
+    </div>
+    <button (click)="openCreateModal()" class="btn btn-primary">
+      + Nueva Categoría
+    </button>
+  </div>
+
+  <div *ngIf="categoryService.isLoading()" class="loading-state">
+    <p>Cargando categorías...</p>
+  </div>
+
+  <div class="card table-card" *ngIf="!categoryService.isLoading()">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Tareas Asociadas</th>
+          <th>Fecha Creación</th>
+          <th class="text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cat of categoryService.categories()">
+          <td><strong>#{{ cat.id }}</strong></td>
+          <td>{{ cat.nombre }}</td>
+          <td>
+            <span class="badge badge-enprogreso">{{ cat.totalTasks ?? 0 }} tareas</span>
+          </td>
+          <td>{{ cat.createdAt | date:'short' }}</td>
+          <td class="text-right actions-cell">
+            <button (click)="openEditModal(cat)" class="btn btn-secondary btn-sm">Editar</button>
+            <button (click)="onDelete(cat.id)" class="btn btn-danger btn-sm">Eliminar</button>
+          </td>
+        </tr>
+        <tr *ngIf="categoryService.categories().length === 0">
+          <td colspan="5" class="text-center empty-state">No hay categorías registradas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal para Crear / Editar Categoría -->
+  <div class="modal-backdrop" *ngIf="showModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ editingCategory() ? 'Editar Categoría' : 'Nueva Categoría' }}</h3>
+        <button (click)="closeModal()" class="btn-close">&times;</button>
+      </div>
+
+      <div *ngIf="errorMessage()" class="alert-error">
+        {{ errorMessage() }}
+      </div>
+
+      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label class="form-label" for="catNombre">Nombre de la Categoría</label>
+          <input
+            id="catNombre"
+            type="text"
+            formControlName="nombre"
+            class="form-control"
+            placeholder="Ej. Liquidaciones, Auditoría, SCTR"
+          />
+          <div *ngIf="categoryForm.get('nombre')?.touched && categoryForm.get('nombre')?.invalid" class="error-text">
+            <span *ngIf="categoryForm.get('nombre')?.hasError('required')">El nombre es requerido.</span>
+            <span *ngIf="categoryForm.get('nombre')?.hasError('maxlength')">Máximo 80 caracteres.</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" (click)="closeModal()" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">
+            {{ editingCategory() ? 'Guardar Cambios' : 'Crear Categoría' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

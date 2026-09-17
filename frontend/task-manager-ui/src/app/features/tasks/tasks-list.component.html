@@ -1,0 +1,111 @@
+<div class="container">
+  <!-- Header con botón de acción -->
+  <div class="header-action">
+    <div>
+      <h1 class="page-title">Gestor de Tareas</h1>
+      <p class="page-subtitle">Supervisa, planifica y ejecuta tus actividades asignadas</p>
+    </div>
+    <button (click)="openCreateModal()" class="btn btn-primary">
+      + Nueva Tarea
+    </button>
+  </div>
+
+  <!-- Métricas y Estadísticas Reactivas (Signals) -->
+  <div class="stats-grid">
+    <div class="card stat-card">
+      <div class="stat-number">{{ taskService.taskStats().total }}</div>
+      <div class="stat-label">Total Tareas</div>
+    </div>
+    <div class="card stat-card stat-pending">
+      <div class="stat-number">{{ taskService.taskStats().pendientes }}</div>
+      <div class="stat-label">Pendientes</div>
+    </div>
+    <div class="card stat-card stat-progress">
+      <div class="stat-number">{{ taskService.taskStats().enProgreso }}</div>
+      <div class="stat-label">En Progreso</div>
+    </div>
+    <div class="card stat-card stat-completed">
+      <div class="stat-number">{{ taskService.taskStats().completadas }}</div>
+      <div class="stat-label">Completadas</div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card filter-card">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label class="form-label" for="filterCat">Filtrar por Categoría:</label>
+        <select id="filterCat" (change)="onFilterCategory($event)" class="form-control">
+          <option value="">Todas las categorías</option>
+          <option *ngFor="let cat of categoryService.categories()" [value]="cat.id">
+            {{ cat.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="form-label" for="filterState">Filtrar por Estado:</label>
+        <select id="filterState" (change)="onFilterStatus($event)" class="form-control">
+          <option value="">Todos los estados</option>
+          <option [value]="EstadoTarea.Pendiente">Pendiente</option>
+          <option [value]="EstadoTarea.EnProgreso">En Progreso</option>
+          <option [value]="EstadoTarea.Completada">Completada</option>
+          <option [value]="EstadoTarea.Cancelada">Cancelada</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado de carga -->
+  <div *ngIf="taskService.isLoading()" class="loading-state">
+    <p>Cargando tareas...</p>
+  </div>
+
+  <!-- Grid de Tarjetas de Tareas -->
+  <div class="tasks-grid" *ngIf="!taskService.isLoading()">
+    <div class="card task-card" *ngFor="let task of taskService.filteredTasks()">
+      <div class="task-card-header">
+        <span class="badge" [ngClass]="getStatusClass(task.estado)">
+          {{ task.estadoDescripcion }}
+        </span>
+        <span class="category-pill">{{ task.categoriaNombre }}</span>
+      </div>
+
+      <h3 class="task-title">{{ task.titulo }}</h3>
+      <p class="task-description">{{ task.descripcion || 'Sin descripción detallada.' }}</p>
+
+      <div class="task-dates">
+        <div class="date-item">
+          <span class="date-label">Inicio:</span>
+          <span class="date-val">{{ task.fechaInicio | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="date-item">
+          <span class="date-label">Cierre:</span>
+          <span class="date-val">{{ task.fechaCierre | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+
+      <div class="task-footer">
+        <span class="task-user">Asignado: <strong>{{ task.usuarioNombre }}</strong></span>
+        <div class="task-actions">
+          <button (click)="openEditModal(task)" class="btn btn-secondary btn-sm">Editar</button>
+          <button (click)="onDeleteTask(task.id)" class="btn btn-danger btn-sm">Eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="card empty-card" *ngIf="taskService.filteredTasks().length === 0">
+      <p>No se encontraron tareas con los filtros seleccionados.</p>
+      <button (click)="openCreateModal()" class="btn btn-primary btn-sm mt-3">+ Crear Primera Tarea</button>
+    </div>
+  </div>
+
+  <!-- Modal de Creación / Edición -->
+  <app-task-form-modal
+    *ngIf="showModal()"
+    [taskToEdit]="taskToEdit()"
+    (close)="closeModal()"
+    (saved)="onTaskSaved()"
+  ></app-task-form-modal>
+</div>
